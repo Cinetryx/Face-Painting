@@ -22,6 +22,7 @@ boolean display = true;
 
 FaceTracker tracker;
 
+//Face class to track position and stats of face with methods to draw the face to the screen
 class Face {
   String name;
   int xPos;
@@ -96,6 +97,7 @@ class Face {
   }
 }
 
+//A class to keep track of possible matches between visible faces and stored faces
 class FaceMatch {
   Face savedFace;
   Rectangle currentFace;
@@ -110,6 +112,7 @@ class FaceMatch {
   }
 }
 
+//A class to keep track of faces in memory, and match visible faces to saved ones
 class FaceTracker {
   ArrayList<Face> savedFaces;
   ArrayList<Rectangle> visibleFaces;
@@ -248,61 +251,18 @@ void setup() {
 
 void draw() {
   scale(2);
+  //Load video frame into opencv
   opencv.loadImage(video);
   if(clearCanvas){background(255);}
   if(showVideo){image(video, 0, 0 );faceAlpha = faceAlphaMax;}else{faceAlpha = faceAlphaMin;}
-
+  
+  //Find faces in frame
   faces = opencv.detect();
-  //println(faces.length);
+  
+  //Match current faces with saved faces
   if(display){checkFaces();}//tracker.update(faces);}
-  
-  
-    /*fill(0,180,200,233);
-    stroke(0, 100, 200);
-    strokeWeight(3);
-    int xPos = faces[i].x;
-    int yPos = faces[i].y;
-    int faceWidth = faces[i].width;
-    int faceHeight = faces[i].height;
-    //println(faces[i].x + "," + faces[i].y);
-    //rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
-    ellipseMode(CORNER);
-    ellipse(xPos,yPos,faceWidth,faceHeight);
-    float halfX = xPos+(faceWidth/2);
-    float halfY = yPos+(faceHeight/2);
-    float thirdX = xPos+(faceWidth/3);
-    float thirdY = yPos+(faceHeight/3);
-    float twoThirdsX = xPos+(2*faceWidth/3);
-    float doubleHeight = yPos+faceHeight*2;
-    float excitement = yPos+height/height;
-    float exciteMod = excitement/86;
-    println(exciteMod);
-    float armsHigh = yPos+(faceHeight*(1.3*exciteMod));
-    float armpit = yPos+faceHeight*1.5;
-    float farLeft = xPos-(faceWidth*0.3);
-    float farRight = xPos+(faceWidth*1.3);
-    float feet = yPos + faceHeight*4;
-    float eyecite = 8*(1/exciteMod);
-    float eyeLength = (yPos+(1.5*faceHeight/3))+eyecite;
-    float eyeStart = thirdY-eyecite;
-    
-    line(thirdX,eyeStart,thirdX,eyeLength);
-    line(twoThirdsX,eyeStart,twoThirdsX,eyeLength);
-    noFill();
-    ellipseMode(CENTER);
-    //Mouth
-    arc(halfX,halfY,faceWidth*0.8,faceHeight*0.8,exciteMod,PI-exciteMod);
-    fill(0,180,200,243);
-    strokeWeight(6);
-    
-    //Spine and arms
-    /*line(halfX,yPos+faceHeight+3,halfX,doubleHeight);
-    line(halfX,armpit,farLeft,armsHigh);
-    line(halfX,armpit,farRight,armsHigh);
-    line(halfX,doubleHeight,farLeft,feet);
-    line(halfX,doubleHeight,farRight,feet);*/
 }
-
+//Track user input
 void keyReleased() {
   if(key=='c'){
     clearCanvas = !clearCanvas;
